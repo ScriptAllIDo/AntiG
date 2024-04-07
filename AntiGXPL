@@ -1,0 +1,69 @@
+-- Create a function to highlight players
+local function highlightPlayers()
+    for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
+        -- Create a selection box for each player
+        local selectionBox = Instance.new("SelectionBox")
+        selectionBox.Parent = player.Character
+        selectionBox.Color3 = Color3.new(1, 0, 0) -- Red color
+        selectionBox.LineThickness = 0.05
+        selectionBox.Adornee = player.Character.HumanoidRootPart
+    end
+end
+
+-- Call the function to highlight players when the game starts
+highlightPlayers()-- Function to enable flying
+local function enableFlying(player)
+    -- Check if player and their character exist
+    if player and player.Character then
+        local character = player.Character
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+        -- Check if humanoid exists
+        if humanoid then
+            -- Enable flying
+            humanoid.PlatformStand = true
+            humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+        end
+    end
+end
+
+-- Function to disable flying
+local function disableFlying(player)
+    -- Check if player and their character exist
+    if player and player.Character then
+        local character = player.Character
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+        -- Check if humanoid exists
+        if humanoid then
+            -- Disable flying
+            humanoid.PlatformStand = false
+            humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+        end
+    end
+end
+
+-- Create a simple GUI button to toggle flying
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui")
+gui.Parent = player.PlayerGui
+
+local button = Instance.new("TextButton")
+button.Text = "Fly"
+button.Size = UDim2.new(0, 100, 0, 50)
+button.Position = UDim2.new(0.5, -50, 0.5, -25)
+button.Parent = gui
+
+-- Event handler for button click
+button.MouseButton1Click:Connect(function()
+    if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
+        local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid.PlatformStand then
+            disableFlying(player)
+            button.Text = "Fly"
+        else
+            enableFlying(player)
+            button.Text = "Stop Flying"
+        end
+    end
+end)
